@@ -1,1 +1,3 @@
-# LAB-IA_JCTD
+# LAB-IA_JCTD 
+
+Julisn camilo Torres Donado (LAB IA)
