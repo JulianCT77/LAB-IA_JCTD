@@ -1,0 +1,218 @@
+#VRML_SIM R2023b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+
+WorldInfo {
+  basicTimeStep 16
+  physicsDisableTime 0.5
+  gravity 0 0 -9.81  # Gravedad explícita
+}
+
+Viewpoint {
+  orientation -0.577 0.577 0.577 2.094
+  position 2 2 1.5
+}
+
+TexturedBackground { }
+TexturedBackgroundLight { }
+
+Floor {
+  size 10 10
+  appearance PBRAppearance {
+    baseColorMap ImageTexture {
+      url [
+        "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/interlaced_parquetry.jpg"
+      ]
+    }
+    roughness 1
+    metalness 0
+  }
+}
+
+Robot {
+  translation 0 0 0.04
+  rotation 0 0 1 0
+  controller "pendulo_controller"
+  children [
+    GPS {
+      name "gps_carro"
+    }
+    InertialUnit {
+      name "inertial_carro"
+    }
+
+    # Carro (caja principal) - Masa: 5 kg
+    Solid {
+      name "carro"
+      translation 0 0 0.10
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.2 0.2 0.8
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.4 0.25 0.12
+          }
+        }
+        
+        # Punto de anclaje del péndulo
+        Transform {
+          translation 0 0 0.06
+          children [
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 1 0
+                dampingConstant 0.05  # Amortiguación aumentada
+              }
+              device [
+                PositionSensor {
+                  name "sensor_pendulo"
+                }
+              ]
+              endPoint Solid {
+                name "pendulo"
+                translation 0 0 0.25  # Longitud del brazo: 0.25m
+                children [
+                  # Brazo del péndulo - Masa: 0.1 kg
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.8 0.2 0.2
+                      roughness 1
+                      metalness 0
+                    }
+                    geometry Cylinder {
+                      height 0.5  # Longitud total 0.5m
+                      radius 0.01
+                    }
+                  }
+                  
+                  # Bola del péndulo - Masa: 0.5 kg
+                  Transform {
+                    translation 0 0 0.25
+                    children [
+                      Shape {
+                        appearance PBRAppearance {
+                          baseColor 0.9 0.1 0.1
+                          roughness 0.5
+                          metalness 0.2
+                        }
+                        geometry Sphere {
+                          radius 0.05
+                        }
+                      }
+                    ]
+                  }
+                ]
+                boundingObject Cylinder {
+                  height 0.5
+                  radius 0.01
+                }
+                physics Physics {
+                  mass 0.1  # Masa del brazo
+                  centerOfMass [0 0 0.25]  # Centro de masa en la bola
+                }
+              }
+            }
+          ]
+        }
+      ]
+      boundingObject Box {
+        size 0.4 0.25 0.12
+      }
+      physics Physics {
+        mass 5.0  # Masa del carro (kg)
+        centerOfMass [0 0 0.06]  # Centro de masa bajo
+      }
+    }
+
+    # RUEDA DERECHA - Masa: 0.4 kg
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0.15 0.12 0.04
+        axis 0 1 0
+        staticFriction 1.0
+        dampingConstant 0.1
+      }
+      device [
+        RotationalMotor {
+          name "rueda_der"
+          maxVelocity 20
+          maxTorque 10.0  # Aumentado para mejor control
+        }
+      ]
+      endPoint Solid {
+        name "rueda_derecha"
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.06
+              radius 0.04
+            }
+          }
+        ]
+        boundingObject Cylinder {
+          height 0.06
+          radius 0.04
+        }
+        physics Physics {
+          mass 0.4
+        }
+      }
+    }
+
+    # RUEDA IZQUIERDA - Masa: 0.4 kg
+    HingeJoint {
+      jointParameters HingeJointParameters {
+        anchor 0.15 -0.12 0.04
+        axis 0 1 0
+        staticFriction 1.0
+        dampingConstant 0.1
+      }
+      device [
+        RotationalMotor {
+          name "rueda_izq"
+          maxVelocity 20
+          maxTorque 10.0
+        }
+      ]
+      endPoint Solid {
+        name "rueda_izquierda"
+        children [
+          Shape {
+            appearance PBRAppearance {
+              baseColor 0 0 0
+              roughness 1
+              metalness 0
+            }
+            geometry Cylinder {
+              height 0.06
+              radius 0.04
+            }
+          }
+        ]
+        boundingObject Cylinder {
+          height 0.06
+          radius 0.04
+        }
+        physics Physics {
+          mass 0.4
+        }
+      }
+    }
+  ]
+  boundingObject Box {
+    size 0.01 0.01 0.01
+  }
+  physics Physics {
+    mass 0.001
+  }
+}
