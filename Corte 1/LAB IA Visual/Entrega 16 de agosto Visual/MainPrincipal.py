@@ -1,3 +1,5 @@
+#julian Camilo Torres
+
 from Entrega1 import InvertedPendulumSimulator
 
 def main():
