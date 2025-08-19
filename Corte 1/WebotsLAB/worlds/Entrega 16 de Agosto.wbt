@@ -1,4 +1,4 @@
-#VRML_SIM R2023b utf8
+#VRML_SIM R2025a utf8
 
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
@@ -7,19 +7,16 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
   basicTimeStep 16
   physicsDisableTime 0.5
-  gravity 0 0 -9.81  # Gravedad explícita
 }
-
 Viewpoint {
-  orientation -0.577 0.577 0.577 2.094
-  position 2 2 1.5
+  orientation -0.3816052597967692 0.42595993915444885 0.8203264934957168 1.6581790128822569
+  position 0.8528885493520841 -9.754735095152347 14.254246547051235
 }
-
-TexturedBackground { }
-TexturedBackgroundLight { }
-
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
 Floor {
-  size 10 10
   appearance PBRAppearance {
     baseColorMap ImageTexture {
       url [
@@ -30,11 +27,9 @@ Floor {
     metalness 0
   }
 }
-
 Robot {
-  translation 0 0 0.04
+  translation 0 0 0
   rotation 0 0 1 0
-  controller "pendulo_controller"
   children [
     GPS {
       name "gps_carro"
@@ -42,11 +37,8 @@ Robot {
     InertialUnit {
       name "inertial_carro"
     }
-
-    # Carro (caja principal) - Masa: 5 kg
     Solid {
-      name "carro"
-      translation 0 0 0.10
+      translation 0 0 0.06
       children [
         Shape {
           appearance PBRAppearance {
@@ -58,26 +50,250 @@ Robot {
             size 0.4 0.25 0.12
           }
         }
-        
-        # Punto de anclaje del péndulo
-        Transform {
-          translation 0 0 0.06
+        # Ruedas izquierdas
+        Solid {
+          translation 0.15 0 -0.06
+          rotation 0 1 0 1.5708
           children [
             HingeJoint {
               jointParameters HingeJointParameters {
+                position 0
                 axis 0 1 0
-                dampingConstant 0.05  # Amortiguación aumentada
+                anchor 0 -0.125 0
+                dampingConstant 0.5
+                staticFriction 0.1
               }
               device [
-                PositionSensor {
-                  name "sensor_pendulo"
+                RotationalMotor {
+                  name "motor_izq"
+                  maxTorque 30
                 }
               ]
               endPoint Solid {
-                name "pendulo"
-                translation 0 0 0.25  # Longitud del brazo: 0.25m
+                translation 0 -0.125 0
+                rotation 1 0 0 0
                 children [
-                  # Brazo del péndulo - Masa: 0.1 kg
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.1 0.1 0.1
+                      roughness 0.7
+                      metalness 0.3
+                    }
+                    geometry Cylinder {
+                      height 0.05
+                      radius 0.05
+                      subdivision 16
+                    }
+                  }
+                ]
+                boundingObject Cylinder {
+                  height 0.05
+                  radius 0.05
+                  subdivision 16
+                }
+                physics Physics {
+                  density -1
+                  mass 0.8
+                  damping Damping {
+                    angular 0.3
+                  }
+                }
+              }
+            }
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                position 0
+                axis 0 1 0
+                anchor 0 0.125 0
+                dampingConstant 0.5
+                staticFriction 0.1
+              }
+              device [
+                RotationalMotor {
+                  name "motor_der"
+                  maxTorque 30
+                }
+              ]
+              endPoint Solid {
+                translation 0 0.125 0
+                rotation 1 0 0 0
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.1 0.1 0.1
+                      roughness 0.7
+                      metalness 0.3
+                    }
+                    geometry Cylinder {
+                      height 0.05
+                      radius 0.05
+                      subdivision 16
+                    }
+                  }
+                ]
+                boundingObject Cylinder {
+                  height 0.05
+                  radius 0.05
+                  subdivision 16
+                }
+                physics Physics {
+                  density -1
+                  mass 0.8
+                  damping Damping {
+                    angular 0.3
+                  }
+                }
+              }
+            }
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.7 0.7 0.7
+                roughness 0.5
+                metalness 0.5
+              }
+              geometry Cylinder {
+                height 0.25
+                radius 0.01
+                subdivision 12
+              }
+            }
+          ]
+          boundingObject Cylinder {
+            height 0.25
+            radius 0.01
+            subdivision 16
+          }
+          physics Physics {
+            density -1
+            mass 0.1
+          }
+        }
+        # Ruedas derechas
+        Solid {
+          translation -0.15 0 -0.06
+          rotation 0 1 0 1.5708
+          children [
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                position 0
+                axis 0 1 0
+                anchor 0 -0.125 0
+                dampingConstant 0.5
+                staticFriction 0.1
+              }
+              endPoint Solid {
+                translation 0 -0.125 0
+                rotation 1 0 0 0
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.1 0.1 0.1
+                      roughness 0.7
+                      metalness 0.3
+                    }
+                    geometry Cylinder {
+                      height 0.05
+                      radius 0.05
+                      subdivision 16
+                    }
+                  }
+                ]
+                boundingObject Cylinder {
+                  height 0.05
+                  radius 0.05
+                  subdivision 16
+                }
+                physics Physics {
+                  density -1
+                  mass 0.8
+                  damping Damping {
+                    angular 0.3
+                  }
+                }
+              }
+            }
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                position 0
+                axis 0 1 0
+                anchor 0 0.125 0
+                dampingConstant 0.5
+                staticFriction 0.1
+              }
+              endPoint Solid {
+                translation 0 0.125 0
+                rotation 1 0 0 0
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.1 0.1 0.1
+                      roughness 0.7
+                      metalness 0.3
+                    }
+                    geometry Cylinder {
+                      height 0.05
+                      radius 0.05
+                      subdivision 16
+                    }
+                  }
+                ]
+                boundingObject Cylinder {
+                  height 0.05
+                  radius 0.05
+                  subdivision 16
+                }
+                physics Physics {
+                  density -1
+                  mass 0.8
+                  damping Damping {
+                    angular 0.3
+                  }
+                }
+              }
+            }
+            Shape {
+              appearance PBRAppearance {
+                baseColor 0.7 0.7 0.7
+                roughness 0.5
+                metalness 0.5
+              }
+              geometry Cylinder {
+                height 0.25
+                radius 0.01
+                subdivision 12
+              }
+            }
+          ]
+          boundingObject Cylinder {
+            height 0.25
+            radius 0.01
+            subdivision 16
+          }
+          physics Physics {
+            density -1
+            mass 0.1
+          }
+        }
+        # PÉNDULO INVERTIDO - VERSIÓN CORREGIDA
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position 0  # Ángulo inicial 0 (vertical)
+            axis 0 1 0  # Eje de rotación Y
+            anchor 0 0 0.06  # Punto de anclaje en el centro superior del carro
+          }
+          device [
+            PositionSensor {
+              name "sensor_pendulo"
+            }
+          ]
+          endPoint Solid {
+            translation 0 0 0.06  # Base de la varilla en el carro
+            rotation 1 0 0 0      # Sin rotación inicial
+            children [
+              # Varilla del péndulo (extendiéndose hacia arriba)
+              Transform {
+                translation 0 0 0.25  # Mitad de la altura de la varilla
+                children [
                   Shape {
                     appearance PBRAppearance {
                       baseColor 0.8 0.2 0.2
@@ -85,126 +301,78 @@ Robot {
                       metalness 0
                     }
                     geometry Cylinder {
-                      height 0.5  # Longitud total 0.5m
+                      height 0.5
                       radius 0.01
                     }
                   }
-                  
-                  # Bola del péndulo - Masa: 0.5 kg
-                  Transform {
-                    translation 0 0 0.25
-                    children [
-                      Shape {
-                        appearance PBRAppearance {
-                          baseColor 0.9 0.1 0.1
-                          roughness 0.5
-                          metalness 0.2
-                        }
-                        geometry Sphere {
-                          radius 0.05
-                        }
-                      }
-                    ]
+                ]
+              }
+              # Masa del péndulo (en la parte superior de la varilla)
+              Transform {
+                translation 0 0 0.5  # Extremo superior de la varilla
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.9 0.1 0.1
+                      roughness 0.5
+                      metalness 0.2
+                    }
+                    geometry Sphere {
+                      radius 0.05
+                    }
                   }
                 ]
-                boundingObject Cylinder {
-                  height 0.5
-                  radius 0.01
-                }
-                physics Physics {
-                  mass 0.1  # Masa del brazo
-                  centerOfMass [0 0 0.25]  # Centro de masa en la bola
-                }
               }
+            ]
+            name "pendulo"
+            boundingObject Group {
+              children [
+                Transform {
+                  translation 0 0 0.25
+                  children [
+                    Cylinder {
+                      height 0.5
+                      radius 0.01
+                    }
+                  ]
+                }
+                Transform {
+                  translation 0 0 0.5
+                  children [
+                    Sphere {
+                      radius 0.05
+                    }
+                  ]
+                }
+              ]
             }
-          ]
+            physics Physics {
+              density -1
+              mass 0.5
+              centerOfMass [
+                0 0 0.5  # Centro de masa en la esfera superior
+              ]
+            }
+          }
         }
       ]
+      name "carro"
       boundingObject Box {
         size 0.4 0.25 0.12
       }
       physics Physics {
-        mass 5.0  # Masa del carro (kg)
-        centerOfMass [0 0 0.06]  # Centro de masa bajo
-      }
-    }
-
-    # RUEDA DERECHA - Masa: 0.4 kg
-    HingeJoint {
-      jointParameters HingeJointParameters {
-        anchor 0.15 0.12 0.04
-        axis 0 1 0
-        staticFriction 1.0
-        dampingConstant 0.1
-      }
-      device [
-        RotationalMotor {
-          name "rueda_der"
-          maxVelocity 20
-          maxTorque 10.0  # Aumentado para mejor control
-        }
-      ]
-      endPoint Solid {
-        name "rueda_derecha"
-        children [
-          Shape {
-            appearance PBRAppearance {
-              baseColor 0 0 0
-              roughness 1
-              metalness 0
-            }
-            geometry Cylinder {
-              height 0.06
-              radius 0.04
-            }
-          }
+        density -1
+        mass 3
+        centerOfMass [
+          0 0 -0.06
         ]
-        boundingObject Cylinder {
-          height 0.06
-          radius 0.04
-        }
-        physics Physics {
-          mass 0.4
-        }
-      }
-    }
-
-    # RUEDA IZQUIERDA - Masa: 0.4 kg
-    HingeJoint {
-      jointParameters HingeJointParameters {
-        anchor 0.15 -0.12 0.04
-        axis 0 1 0
-        staticFriction 1.0
-        dampingConstant 0.1
-      }
-      device [
-        RotationalMotor {
-          name "rueda_izq"
-          maxVelocity 20
-          maxTorque 10.0
-        }
-      ]
-      endPoint Solid {
-        name "rueda_izquierda"
-        children [
-          Shape {
-            appearance PBRAppearance {
-              baseColor 0 0 0
-              roughness 1
-              metalness 0
-            }
-            geometry Cylinder {
-              height 0.06
-              radius 0.04
-            }
-          }
+        inertiaMatrix [
+          0.15 0.08 0.15
+          0 0 0
         ]
-        boundingObject Cylinder {
-          height 0.06
-          radius 0.04
-        }
-        physics Physics {
-          mass 0.4
+        damping Damping {
+          linear 0.3
+          angular 0.5
         }
       }
     }
@@ -213,6 +381,8 @@ Robot {
     size 0.01 0.01 0.01
   }
   physics Physics {
-    mass 0.001
+    density -1
+    mass 0.0001
   }
+  controller "pendulo_controller"
 }
