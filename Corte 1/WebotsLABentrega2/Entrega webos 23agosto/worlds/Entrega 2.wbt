@@ -51,7 +51,7 @@ Robot {
           }
         }
         
-        # Eje trasero (ruedas izquierda y derecha con motor)
+        # Eje trasero (ruedas motorizadas)
         Solid {
           translation 0.15 0 -0.06
           children [
@@ -60,18 +60,24 @@ Robot {
               jointParameters HingeJointParameters {
                 axis 0 1 0
                 anchor 0 -0.125 0
-                dampingConstant 0.5
-                staticFriction 0.1
+                dampingConstant 0.2
+                staticFriction 0.05
               }
               device [
                 RotationalMotor {
                   name "motor_izq"
-                  maxTorque 30
+                  maxTorque 100
+                  maxVelocity 100
+                  minPosition -inf
+                  maxPosition +inf
+                }
+                PositionSensor {
+                  name "sensor_rueda_izq"
                 }
               ]
               endPoint Solid {
                 translation 0 -0.125 0
-                rotation 1 0 0 1.5708  # Rotación corregida (90° alrededor del eje X)
+                rotation 1 0 0 1.5708
                 children [
                   Shape {
                     appearance PBRAppearance {
@@ -82,7 +88,7 @@ Robot {
                     geometry Cylinder {
                       height 0.05
                       radius 0.05
-                      subdivision 24
+                      subdivision 36
                     }
                   }
                 ]
@@ -105,18 +111,24 @@ Robot {
               jointParameters HingeJointParameters {
                 axis 0 1 0
                 anchor 0 0.125 0
-                dampingConstant 0.5
-                staticFriction 0.1
+                dampingConstant 0.2
+                staticFriction 0.05
               }
               device [
                 RotationalMotor {
                   name "motor_der"
-                  maxTorque 30
+                  maxTorque 100
+                  maxVelocity 100
+                  minPosition -inf
+                  maxPosition +inf
+                }
+                PositionSensor {
+                  name "sensor_rueda_der"
                 }
               ]
               endPoint Solid {
                 translation 0 0.125 0
-                rotation 1 0 0 1.5708  # Rotación corregida (90° alrededor del eje X)
+                rotation 1 0 0 1.5708
                 children [
                   Shape {
                     appearance PBRAppearance {
@@ -127,7 +139,7 @@ Robot {
                     geometry Cylinder {
                       height 0.05
                       radius 0.05
-                      subdivision 24
+                      subdivision 36
                     }
                   }
                 ]
@@ -152,7 +164,7 @@ Robot {
           }
         }
         
-        # Eje delantero (ruedas sin motor)
+        # Eje delantero (ruedas pasivas)
         Solid {
           translation -0.15 0 -0.06
           children [
@@ -161,12 +173,12 @@ Robot {
               jointParameters HingeJointParameters {
                 axis 0 1 0
                 anchor 0 -0.125 0
-                dampingConstant 0.5
-                staticFriction 0.1
+                dampingConstant 0.2
+                staticFriction 0.05
               }
               endPoint Solid {
                 translation 0 -0.125 0
-                rotation 1 0 0 1.5708  # Rotación corregida (90° alrededor del eje X)
+                rotation 1 0 0 1.5708
                 children [
                   Shape {
                     appearance PBRAppearance {
@@ -177,7 +189,7 @@ Robot {
                     geometry Cylinder {
                       height 0.05
                       radius 0.05
-                      subdivision 24
+                      subdivision 36
                     }
                   }
                 ]
@@ -200,12 +212,12 @@ Robot {
               jointParameters HingeJointParameters {
                 axis 0 1 0
                 anchor 0 0.125 0
-                dampingConstant 0.5
-                staticFriction 0.1
+                dampingConstant 0.2
+                staticFriction 0.05
               }
               endPoint Solid {
                 translation 0 0.125 0
-                rotation 1 0 0 1.5708  # Rotación corregida (90° alrededor del eje X)
+                rotation 1 0 0 1.5708
                 children [
                   Shape {
                     appearance PBRAppearance {
@@ -216,7 +228,7 @@ Robot {
                     geometry Cylinder {
                       height 0.05
                       radius 0.05
-                      subdivision 24
+                      subdivision 36
                     }
                   }
                 ]
@@ -328,7 +340,7 @@ Robot {
       }
       physics Physics {
         density -1
-        mass 3
+        mass 5
         centerOfMass [
           0 0 -0.06
         ]
@@ -350,5 +362,5 @@ Robot {
     density -1
     mass 0.0001
   }
-  controller "pendulo_controller"
+  controller "pendulo_controller2"
 }
