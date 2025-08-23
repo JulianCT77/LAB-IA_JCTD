@@ -1,0 +1,359 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+
+WorldInfo {
+  basicTimeStep 4
+  physicsDisableTime 0.5
+}
+Viewpoint {
+  orientation -0.3816052597967692 0.42595993915444885 0.8203264934957168 1.6581790128822569
+  position 0.8528885493520841 -9.754735095152347 14.254246547051235
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  appearance PBRAppearance {
+    baseColorMap ImageTexture {
+      url [
+        "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/default/worlds/textures/interlaced_parquetry.jpg"
+      ]
+    }
+    roughness 1
+    metalness 0
+  }
+}
+Robot {
+  translation 0 0 0
+  rotation 0 0 1 0
+  children [
+    GPS {
+      name "gps_carro"
+    }
+    InertialUnit {
+      name "inertial_carro"
+    }
+    Solid {
+      translation 0 0 0.06
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.2 0.2 0.8
+            roughness 1
+            metalness 0
+          }
+          geometry Box {
+            size 0.4 0.25 0.12
+          }
+        }
+        
+        Solid {
+          translation 0.15 0 -0.06
+          children [
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 1 0
+                anchor 0 -0.125 0
+                dampingConstant 0.005  # Reducido
+                staticFriction 0.0005  # Reducido
+              }
+              device [
+                RotationalMotor {
+                  name "motor_izq"
+                  maxTorque 500  # Aumentado
+                  maxVelocity 250  # Aumentado
+                  minPosition -inf
+                  maxPosition +inf
+                }
+                PositionSensor {
+                  name "sensor_rueda_izq"
+                }
+              ]
+              endPoint Solid {
+                translation 0 -0.125 0
+                rotation 1 0 0 1.5708
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.1 0.1 0.1
+                      roughness 0.7
+                      metalness 0.3
+                    }
+                    geometry Cylinder {
+                      height 0.05
+                      radius 0.05
+                      subdivision 36
+                    }
+                  }
+                ]
+                boundingObject Cylinder {
+                  height 0.05
+                  radius 0.05
+                }
+                physics Physics {
+                  density -1
+                  mass 0.8
+                  damping Damping {
+                    angular 0.02  # Reducido
+                  }
+                }
+              }
+            }
+            
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 1 0
+                anchor 0 0.125 0
+                dampingConstant 0.005  # Reducido
+                staticFriction 0.0005  # Reducido
+              }
+              device [
+                RotationalMotor {
+                  name "motor_der"
+                  maxTorque 500  # Aumentado
+                  maxVelocity 250  # Aumentado
+                  minPosition -inf
+                  maxPosition +inf
+                }
+                PositionSensor {
+                  name "sensor_rueda_der"
+                }
+              ]
+              endPoint Solid {
+                translation 0 0.125 0
+                rotation 1 0 0 1.5708
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.1 0.1 0.1
+                      roughness 0.7
+                      metalness 0.3
+                    }
+                    geometry Cylinder {
+                      height 0.05
+                      radius 0.05
+                      subdivision 36
+                    }
+                  }
+                ]
+                boundingObject Cylinder {
+                  height 0.05
+                  radius 0.05
+                }
+                physics Physics {
+                  density -1
+                  mass 0.8
+                  damping Damping {
+                    angular 0.02  # Reducido
+                  }
+                }
+              }
+            }
+          ]
+          name "eje_trasero"
+          physics Physics {
+            density -1
+            mass 0.1
+          }
+        }
+        
+        Solid {
+          translation -0.15 0 -0.06
+          children [
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 1 0
+                anchor 0 -0.125 0
+                dampingConstant 0.005  # Reducido
+                staticFriction 0.0005  # Reducido
+              }
+              endPoint Solid {
+                translation 0 -0.125 0
+                rotation 1 0 0 1.5708
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.1 0.1 0.1
+                      roughness 0.7
+                      metalness 0.3
+                    }
+                    geometry Cylinder {
+                      height 0.05
+                      radius 0.05
+                      subdivision 36
+                    }
+                  }
+                ]
+                boundingObject Cylinder {
+                  height 0.05
+                  radius 0.05
+                }
+                physics Physics {
+                  density -1
+                  mass 0.8
+                  damping Damping {
+                    angular 0.02  # Reducido
+                  }
+                }
+              }
+            }
+            
+            HingeJoint {
+              jointParameters HingeJointParameters {
+                axis 0 1 0
+                anchor 0 0.125 0
+                dampingConstant 0.005  # Reducido
+                staticFriction 0.0005  # Reducido
+              }
+              endPoint Solid {
+                translation 0 0.125 0
+                rotation 1 0 0 1.5708
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.1 0.1 0.1
+                      roughness 0.7
+                      metalness 0.3
+                    }
+                    geometry Cylinder {
+                      height 0.05
+                      radius 0.05
+                      subdivision 36
+                    }
+                  }
+                ]
+                boundingObject Cylinder {
+                  height 0.05
+                  radius 0.05
+                }
+                physics Physics {
+                  density -1
+                  mass 0.8
+                  damping Damping {
+                    angular 0.02  # Reducido
+                  }
+                }
+              }
+            }
+          ]
+          name "eje_delantero"
+          physics Physics {
+            density -1
+            mass 0.1
+          }
+        }
+        
+        HingeJoint {
+          jointParameters HingeJointParameters {
+            position 0
+            axis 0 1 0
+            anchor 0 0 0.06
+            dampingConstant 0.005  # Reducido
+          }
+          device [
+            PositionSensor {
+              name "sensor_pendulo"
+            }
+          ]
+          endPoint Solid {
+            translation 0 0 0.06
+            rotation 0 1 0 0.0349  # Ajustado a 2° (0.0349 rad)
+            children [
+              Transform {
+                translation 0 0 0.25
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.8 0.2 0.2
+                      roughness 1
+                      metalness 0
+                    }
+                    geometry Cylinder {
+                      height 0.5
+                      radius 0.01
+                    }
+                  }
+                ]
+              }
+              Transform {
+                translation 0 0 0.5
+                children [
+                  Shape {
+                    appearance PBRAppearance {
+                      baseColor 0.9 0.1 0.1
+                      roughness 0.5
+                      metalness 0.2
+                    }
+                    geometry Sphere {
+                      radius 0.05
+                    }
+                  }
+                ]
+              }
+            ]
+            name "pendulo"
+            boundingObject Group {
+              children [
+                Transform {
+                  translation 0 0 0.25
+                  children [
+                    Cylinder {
+                      height 0.5
+                      radius 0.01
+                    }
+                  ]
+                }
+                Transform {
+                  translation 0 0 0.5
+                  children [
+                    Sphere {
+                      radius 0.05
+                    }
+                  ]
+                }
+              ]
+            }
+            physics Physics {
+              density -1
+              mass 1.0
+              centerOfMass [
+                0 0 0.5
+              ]
+            }
+          }
+        }
+      ]
+      name "carro"
+      boundingObject Box {
+        size 0.4 0.25 0.12
+      }
+      physics Physics {
+        density -1
+        mass 6
+        centerOfMass [
+          0 0 -0.06
+        ]
+        inertiaMatrix [
+          0.18 0.10 0.18
+          0 0 0
+        ]
+        damping Damping {
+          linear 0.05
+          angular 0.1
+        }
+      }
+    }
+  ]
+  boundingObject Box {
+    size 0.01 0.01 0.01
+  }
+  physics Physics {
+    density -1
+    mass 0.0001
+  }
+  controller "pendulo_controller2"
+}
